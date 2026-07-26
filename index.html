@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우주 타자 연습 & 동화 읽기</title>
+    <!-- PWA 설치를 위한 manifest 연결 -->
+    <link rel="manifest" href="./manifest.json">
+    <style>
+        body { 
+            font-family: 'Malgun Gothic', sans-serif; 
+            margin: 0; 
+            padding: 15px; 
+            background-color: #f0f8ff; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        
+        .tab-menu { display: flex; gap: 10px; margin-bottom: 15px; }
+        .tab-btn { 
+            padding: 10px 20px; 
+            font-size: 1.2em; 
+            cursor: pointer; 
+            background-color: #e9ecef; 
+            border: 2px solid #ccc; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            transition: 0.2s;
+        }
+        .tab-btn.active { background-color: #007bff; color: white; border-color: #0056b3; }
+
+        .mode-container {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            flex-direction: column;
+            align-items: center;
+        }
+        .mode-container.active { display: flex; }
+
+        #game-board { 
+            width: 100%; 
+            height: 300px; 
+            background-color: #fff; 
+            border: 4px solid #007bff; 
+            border-radius: 15px; 
+            position: relative; 
+            overflow: hidden; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .falling-word {
+            position: absolute;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            padding: 5px 10px;
+            background-color: #ffeaa7;
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+        #status-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #d9534f;
+        }
+        .input-box {
+            font-size: 1.8em;
+            padding: 10px;
+            text-align: center;
+            width: 90%;
+            border: 3px solid #28a745;
+            border-radius: 10px;
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        #sentence-display { 
+            font-size: 1.6em; 
+            margin: 20px 0; 
+            padding: 20px; 
+            background: #fff; 
+            border-radius: 10px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            font-weight: bold; 
+            text-align: center;
+            line-height: 1.4;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #accuracy { font-size: 1.2em; color: #d9534f; margin-top: 15px; font-weight: bold; height: 30px;}
+
+        #keyboard {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 800px;
+            box-sizing: border-box;
+        }
+        .key-row { display: flex; justify-content: center; gap: 5px; }
+        .key {
+            flex: 1;
+            max-width: 55px;
+            height: 50px;
+            background: #fff;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #555;
+            box-shadow: 0 3px 0 #ccc;
+            transition: all 0.1s;
+        }
+        .key .eng { font-size: 0.8em; color: #007bff; }
+        .key .kor { font-size: 1em; color: #d9534f; }
+        .key.active {
+            background: #ffeb3b;
+            transform: translateY(3px);
+            box-shadow: 0 0 0 #ccc;
+            border-color: #fbc02d;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tab-menu">
+        <button class="tab-btn active" onclick="switchMode('game')">🎮 단어 방어 게임</button>
+        <button class="tab-btn" onclick="switchMode('sentence')">📖 동화 문장 연습</button>
+    </div>
+
+    <!-- 1. 단어 게임 모드 -->
+    <div id="game-mode" class="mode-container active">
+        <div id="status-bar">
+            <span id="score-display">점수: 0</span>
+            <span id="life-display">생명: ♥♥♥♥♥</span>
+        </div>
+        <div id="game-board"></div>
+        <input type="text" id="game-input" class="input-box" autocomplete="off" placeholder="단어를 입력하세요">
+    </div>
+
+    <!-- 2. 문장 연습 모드 -->
+    <div id="sentence-mode" class="mode-container">
+        <div id="sentence-display">불러오는 중...</div>
+        <input type="text" id="sentence-input" class="input-box" autocomplete="off" placeholder="위 문장을 똑같이 입력하세요">
+        <div id="accuracy"></div>
+    </div>
+
+    <!-- 공통 가상 키보드 영역 -->
+    <div id="keyboard"></div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(() => console.log('서비스 워커 등록 완료!'))
+                    .catch(err => console.log('서비스 워커 등록 실패:', err));
+            });
+        }
+
+        let currentMode = 'game';
+        
+        function switchMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.getElementById('game-mode').classList.remove('active');
+            document.getElementById('sentence-mode').classList.remove('active');
+            
+            if (mode === 'game') {
+                document.getElementById('game-mode').classList.add('active');
+                document.getElementById('game-input').focus();
+            } else {
+                document.getElementById('sentence-mode').classList.add('active');
+                loadNextSentence();
+                document.getElementById('sentence-input').focus();
+            }
+        }
+
+        const keysLayout = [
+            [{c:'KeyQ',e:'Q',k:'ㅂ'}, {c:'KeyW',e:'W',k:'ㅈ'}, {c:'KeyE',e:'E',k:'ㄷ'}, {c:'KeyR',e:'R',k:'ㄱ'}, {c:'KeyT',e:'T',k:'ㅅ'}, {c:'KeyY',e:'Y',k:'ㅛ'}, {c:'KeyU',e:'U',k:'ㅕ'}, {c:'KeyI',e:'I',k:'ㅑ'}, {c:'KeyO',e:'O',k:'ㅐ'}, {c:'KeyP',e:'P',k:'ㅔ'}],
+            [{c:'KeyA',e:'A',k:'ㅁ'}, {c:'KeyS',e:'S',k:'ㄴ'}, {c:'KeyD',e:'D',k:'ㅇ'}, {c:'KeyF',e:'F',k:'ㄹ'}, {c:'KeyG',e:'G',k:'ㅎ'}, {c:'KeyH',e:'H',k:'ㅗ'}, {c:'KeyJ',e:'J',k:'ㅓ'}, {c:'KeyK',e:'K',k:'ㅏ'}, {c:'KeyL',e:'L',k:'ㅣ'}],
+            [{c:'KeyZ',e:'Z',k:'ㅋ'}, {c:'KeyX',e:'X',k:'ㅌ'}, {c:'KeyC',e:'C',k:'ㅊ'}, {c:'KeyV',e:'V',k:'ㅍ'}, {c:'KeyB',e:'B',k:'ㅠ'}, {c:'KeyN',e:'N',k:'ㅜ'}, {c:'KeyM',e:'M',k:'ㅡ'}]
+        ];
+
+        const keyboardEl = document.getElementById('keyboard');
+        keysLayout.forEach(row => {
+            const rowDiv = document.createElement('div');
+            rowDiv.className = 'key-row';
+            row.forEach(key => {
+                const keyDiv = document.createElement('div');
+                keyDiv.className = 'key';
+                keyDiv.id = key.c;
+                keyDiv.innerHTML = `<span class="eng">${key.e}</span><span class="kor">${key.k}</span>`;
+                rowDiv.appendChild(keyDiv);
+            });
+            keyboardEl.appendChild(rowDiv);
+        });
+
+        window.addEventListener('keydown', (e) => {
+            const keyEl = document.getElementById(e.code);
+            if (keyEl) keyEl.classList.add('active');
+        });
+        window.addEventListener('keyup', (e) => {
+            const keyEl = document.getElementById(e.code);
+            if (keyEl) keyEl.classList.remove('active');
+        });
+
+        const wordList = [
+            "학교", "우주선", "자전거", "놀이터", "친구", "컴퓨터", "선생님", "강아지", "고양이", "태블릿",
+            "apple", "book", "cat", "dog", "sun", "moon", "star", "tree", "water", "happy"
+        ];
+        
+        const gameBoard = document.getElementById('game-board');
+        const gameInput = document.getElementById('game-input');
+        const scoreDisplay = document.getElementById('score-display');
+        const lifeDisplay = document.getElementById('life-display');
+        
+        let score = 0;
+        let lives = 5;
+        let activeWords = [];
+        let fallSpeed = 0.8; 
+        
+        function spawnWord() {
+            if (lives <= 0 || currentMode !== 'game') return;
+
+            const wordText = wordList[Math.floor(Math.random() * wordList.length)];
+            const wordEl = document.createElement('div');
+            wordEl.className = 'falling-word';
+            wordEl.textContent = wordText;
+            
+            const maxLeft = gameBoard.clientWidth - 80;
+            const randomX = Math.floor(Math.random() * (maxLeft > 0 ? maxLeft : 300));
+            wordEl.style.left = `${randomX}px`;
+            wordEl.style.top = '0px';
+            
+            gameBoard.appendChild(wordEl);
+            activeWords.push({ el: wordEl, text: wordText, top: 0 });
+        }
+
+        function gameLoop() {
+            if (lives <= 0) return; 
+
+            if (currentMode === 'game') {
+                for (let i = 0; i < activeWords.length; i++) {
+                    let wordObj = activeWords[i];
+                    wordObj.top += fallSpeed;
+                    wordObj.el.style.top = `${wordObj.top}px`;
+
+                    if (wordObj.top > gameBoard.clientHeight - 40) {
+                        gameBoard.removeChild(wordObj.el);
+                        activeWords.splice(i, 1);
+                        lives--;
+                        updateLife();
+                        i--; 
+                    }
+                }
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        function updateLife() {
+            let hearts = "";
+            for(let i=0; i<lives; i++) hearts += "♥";
+            lifeDisplay.textContent = `생명: ${hearts}`;
+            
+            if(lives <= 0) {
+                gameInput.disabled = true;
+                alert(`게임 오버! 최종 점수: ${score}점\n새로고침하여 다시 시작하세요.`);
+            }
+        }
+
+        gameInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                const typedWord = gameInput.value.trim();
+                let matchedIndex = -1;
+
+                for (let i = 0; i < activeWords.length; i++) {
+                    if (activeWords[i].text === typedWord) {
+                        matchedIndex = i;
+                        break;
+                    }
+                }
+
+                if (matchedIndex !== -1) {
+                    const matchedWord = activeWords[matchedIndex];
+                    gameBoard.removeChild(matchedWord.el);
+                    activeWords.splice(matchedIndex, 1);
+                    
+                    score += 10;
+                    scoreDisplay.textContent = `점수: ${score}`;
+                    if (score % 50 === 0) fallSpeed += 0.2;
+                }
+                gameInput.value = ''; 
+            }
+        });
+
+        setInterval(spawnWord, 2500);
+        requestAnimationFrame(gameLoop);
+
+
+        let storySentences = [];
+        let currentSentenceIndex = 0;
+        const sentenceInput = document.getElementById('sentence-input');
+        const accuracyDisplay = document.getElementById('accuracy');
+
+        function fetchStories() {
+            const freshData = [
+                "옛날 옛적에 숲 속에 귀여운 아기 돼지 삼형제가 살았어요.",
+                "첫째 돼지는 짚으로 얼기설기 집을 지었어요.",
+                "둘째 돼지는 나무로 뚝딱뚝딱 집을 지었어요.",
+                "셋째 돼지는 튼튼한 벽돌로 집을 지었어요.",
+                "A long time ago, there lived three little pigs.",
+                "The first pig built a house of straw."
+            ];
+
+            if (navigator.onLine) {
+                localStorage.setItem('typingStories', JSON.stringify(freshData));
+            }
+            
+            const saved = localStorage.getItem('typingStories');
+            storySentences = saved ? JSON.parse(saved) : ["오프라인 상태입니다. 인터넷을 한 번 연결해 주세요."];
+        }
+
+        function loadNextSentence() {
+            if(storySentences.length === 0) fetchStories();
+            document.getElementById('sentence-display').textContent = storySentences[currentSentenceIndex];
+            sentenceInput.value = '';
+            accuracyDisplay.textContent = '';
+            sentenceInput.disabled = false;
+            sentenceInput.focus();
+        }
+
+        sentenceInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                const target = storySentences[currentSentenceIndex];
+                const typed = sentenceInput.value;
+                
+                if (target === typed) {
+                    accuracyDisplay.style.color = "#28a745";
+                    accuracyDisplay.textContent = "완벽해요! 💯 다음 문장으로 넘어갑니다.";
+                    sentenceInput.disabled = true; 
+                    currentSentenceIndex = (currentSentenceIndex + 1) % storySentences.length;
+                    setTimeout(loadNextSentence, 1500);
+                } else {
+                    accuracyDisplay.style.color = "#d9534f";
+                    accuracyDisplay.textContent = "오타가 있어요. 다시 한번 꼼꼼히 쳐볼까요?";
+                }
+            }
+        });
+
+        fetchStories();
+        
+    </script>
+</body>
+</html>
