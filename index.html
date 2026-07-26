@@ -4,29 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>우주 타자 연습 & 동화 읽기</title>
-    <!-- PWA 설치를 위한 manifest 연결 -->
     <link rel="manifest" href="./manifest.json">
     <style>
         body { 
             font-family: 'Malgun Gothic', sans-serif; 
             margin: 0; 
-            padding: 15px; 
+            padding: 10px; 
             background-color: #f0f8ff; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
         }
         
-        .tab-menu { display: flex; gap: 10px; margin-bottom: 15px; }
+        .tab-menu { display: flex; gap: 5px; margin-bottom: 15px; width: 100%; max-width: 800px; justify-content: center; }
         .tab-btn { 
-            padding: 10px 20px; 
-            font-size: 1.2em; 
+            flex: 1;
+            padding: 10px 5px; 
+            font-size: 1.1em; 
             cursor: pointer; 
             background-color: #e9ecef; 
             border: 2px solid #ccc; 
             border-radius: 8px; 
             font-weight: bold; 
             transition: 0.2s;
+            text-align: center;
         }
         .tab-btn.active { background-color: #007bff; color: white; border-color: #0056b3; }
 
@@ -38,6 +39,12 @@
             align-items: center;
         }
         .mode-container.active { display: flex; }
+
+        /* 기본 자리 연습 스타일 */
+        .lang-toggle { margin-bottom: 15px; font-size: 1.2em; font-weight: bold; }
+        .lang-toggle label { margin: 0 10px; cursor: pointer; }
+        #basic-target { font-size: 4em; font-weight: bold; margin: 20px; color: #007bff; background: #fff; padding: 20px 40px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        #basic-feedback { font-size: 1.3em; height: 30px; font-weight: bold; margin-bottom: 10px; }
 
         #game-board { 
             width: 100%; 
@@ -63,7 +70,7 @@
             width: 100%;
             display: flex;
             justify-content: space-between;
-            font-size: 1.3em;
+            font-size: 1.2em;
             font-weight: bold;
             margin: 10px 0;
             color: #d9534f;
@@ -80,7 +87,7 @@
         }
 
         #sentence-display { 
-            font-size: 1.6em; 
+            font-size: 1.4em; 
             margin: 20px 0; 
             padding: 20px; 
             background: #fff; 
@@ -99,17 +106,17 @@
             flex-direction: column;
             gap: 5px;
             background: #e9ecef;
-            padding: 15px;
+            padding: 10px;
             border-radius: 10px;
             width: 100%;
             max-width: 800px;
             box-sizing: border-box;
         }
-        .key-row { display: flex; justify-content: center; gap: 5px; }
+        .key-row { display: flex; justify-content: center; gap: 4px; }
         .key {
             flex: 1;
-            max-width: 55px;
-            height: 50px;
+            max-width: 50px;
+            height: 45px;
             background: #fff;
             border: 2px solid #ccc;
             border-radius: 8px;
@@ -122,8 +129,8 @@
             box-shadow: 0 3px 0 #ccc;
             transition: all 0.1s;
         }
-        .key .eng { font-size: 0.8em; color: #007bff; }
-        .key .kor { font-size: 1em; color: #d9534f; }
+        .key .eng { font-size: 0.75em; color: #007bff; }
+        .key .kor { font-size: 0.95em; color: #d9534f; }
         .key.active {
             background: #ffeb3b;
             transform: translateY(3px);
@@ -135,12 +142,24 @@
 <body>
 
     <div class="tab-menu">
-        <button class="tab-btn active" onclick="switchMode('game')">🎮 단어 방어 게임</button>
-        <button class="tab-btn" onclick="switchMode('sentence')">📖 동화 문장 연습</button>
+        <button class="tab-btn active" onclick="switchMode('basic')">⌨️ 기본 자리</button>
+        <button class="tab-btn" onclick="switchMode('game')">🎮 게임 모드</button>
+        <button class="tab-btn" onclick="switchMode('sentence')">📖 동화 연습</button>
     </div>
 
-    <!-- 1. 단어 게임 모드 -->
-    <div id="game-mode" class="mode-container active">
+    <!-- 1. 기본 자리 연습 모드 -->
+    <div id="basic-mode" class="mode-container active">
+        <div class="lang-toggle">
+            <label><input type="radio" name="lang" value="kor" checked onchange="changeBasicLang()"> 한글</label>
+            <label><input type="radio" name="lang" value="eng" onchange="changeBasicLang()"> 영문</label>
+        </div>
+        <div id="basic-target">ㅁ</div>
+        <div id="basic-feedback"></div>
+        <input type="text" id="basic-input" class="input-box" autocomplete="off" maxlength="1" placeholder="여기에 치세요">
+    </div>
+
+    <!-- 2. 단어 게임 모드 -->
+    <div id="game-mode" class="mode-container">
         <div id="status-bar">
             <span id="score-display">점수: 0</span>
             <span id="life-display">생명: ♥♥♥♥♥</span>
@@ -149,7 +168,7 @@
         <input type="text" id="game-input" class="input-box" autocomplete="off" placeholder="단어를 입력하세요">
     </div>
 
-    <!-- 2. 문장 연습 모드 -->
+    <!-- 3. 문장 연습 모드 -->
     <div id="sentence-mode" class="mode-container">
         <div id="sentence-display">불러오는 중...</div>
         <input type="text" id="sentence-input" class="input-box" autocomplete="off" placeholder="위 문장을 똑같이 입력하세요">
@@ -163,22 +182,26 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then(() => console.log('서비스 워커 등록 완료!'))
                     .catch(err => console.log('서비스 워커 등록 실패:', err));
             });
         }
 
-        let currentMode = 'game';
+        let currentMode = 'basic';
         
         function switchMode(mode) {
             currentMode = mode;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             
+            document.getElementById('basic-mode').classList.remove('active');
             document.getElementById('game-mode').classList.remove('active');
             document.getElementById('sentence-mode').classList.remove('active');
             
-            if (mode === 'game') {
+            if (mode === 'basic') {
+                document.getElementById('basic-mode').classList.add('active');
+                nextBasicChar();
+                document.getElementById('basic-input').focus();
+            } else if (mode === 'game') {
                 document.getElementById('game-mode').classList.add('active');
                 document.getElementById('game-input').focus();
             } else {
@@ -217,6 +240,48 @@
             if (keyEl) keyEl.classList.remove('active');
         });
 
+        /* =========================================
+           1. 기본 자리 연습 로직
+        ========================================= */
+        const basicKorChars = ['ㅂ','ㅈ','ㄷ','ㄱ','ㅅ','ㅛ','ㅕ','ㅑ','ㅐ','ㅔ','ㅁ','ㄴ','ㅇ','ㄹ','ㅎ','ㅗ','ㅓ','ㅏ','ㅣ','ㅋ','ㅌ','ㅊ','ㅍ','ㅠ','ㅜ','ㅡ'];
+        const basicEngChars = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+        let currentBasicLang = 'kor';
+
+        function changeBasicLang() {
+            const radios = document.getElementsByName('lang');
+            for(let i = 0; i < radios.length; i++) {
+                if(radios[i].checked) currentBasicLang = radios[i].value;
+            }
+            nextBasicChar();
+            document.getElementById('basic-input').focus();
+        }
+
+        function nextBasicChar() {
+            const chars = currentBasicLang === 'kor' ? basicKorChars : basicEngChars;
+            const randomChar = chars[Math.floor(Math.random() * chars.length)];
+            document.getElementById('basic-target').textContent = randomChar;
+            document.getElementById('basic-input').value = '';
+            document.getElementById('basic-feedback').textContent = '';
+        }
+
+        document.getElementById('basic-input').addEventListener('input', (e) => {
+            const typed = e.target.value.toLowerCase();
+            const target = document.getElementById('basic-target').textContent.toLowerCase();
+            
+            if (typed === target) {
+                document.getElementById('basic-feedback').style.color = "#28a745";
+                document.getElementById('basic-feedback').textContent = "딩동댕! 🎵";
+                setTimeout(nextBasicChar, 200);
+            } else if (typed !== "") {
+                document.getElementById('basic-feedback').style.color = "#d9534f";
+                document.getElementById('basic-feedback').textContent = "다시 쳐볼까요?";
+                e.target.value = ""; // 오타 시 즉시 지우기
+            }
+        });
+
+        /* =========================================
+           2. 단어 방어 게임 로직
+        ========================================= */
         const wordList = [
             "학교", "우주선", "자전거", "놀이터", "친구", "컴퓨터", "선생님", "강아지", "고양이", "태블릿",
             "apple", "book", "cat", "dog", "sun", "moon", "star", "tree", "water", "happy"
@@ -241,7 +306,7 @@
             wordEl.textContent = wordText;
             
             const maxLeft = gameBoard.clientWidth - 80;
-            const randomX = Math.floor(Math.random() * (maxLeft > 0 ? maxLeft : 300));
+            const randomX = Math.floor(Math.random() * (maxLeft > 0 ? maxLeft : 250));
             wordEl.style.left = `${randomX}px`;
             wordEl.style.top = '0px';
             
@@ -309,7 +374,9 @@
         setInterval(spawnWord, 2500);
         requestAnimationFrame(gameLoop);
 
-
+        /* =========================================
+           3. 동화 문장 연습 로직
+        ========================================= */
         let storySentences = [];
         let currentSentenceIndex = 0;
         const sentenceInput = document.getElementById('sentence-input');
@@ -339,7 +406,6 @@
             sentenceInput.value = '';
             accuracyDisplay.textContent = '';
             sentenceInput.disabled = false;
-            sentenceInput.focus();
         }
 
         sentenceInput.addEventListener('keyup', (e) => {
@@ -361,6 +427,9 @@
         });
 
         fetchStories();
+        
+        // 앱 실행 시 기본자리 모드 활성화
+        nextBasicChar();
         
     </script>
 </body>
