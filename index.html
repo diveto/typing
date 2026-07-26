@@ -16,18 +16,10 @@
             align-items: center; 
         }
         
-        /* 글로벌 언어 선택 스위치 */
         .global-controls {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 15px;
-            background: #fff;
-            padding: 10px 20px;
-            border-radius: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            font-size: 1.2em;
-            font-weight: bold;
+            display: flex; justify-content: center; gap: 20px; margin-bottom: 15px;
+            background: #fff; padding: 10px 20px; border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-size: 1.2em; font-weight: bold;
         }
         .global-controls label { cursor: pointer; display: flex; align-items: center; gap: 5px; }
 
@@ -39,17 +31,13 @@
         }
         .tab-btn.active { background-color: #007bff; color: white; border-color: #0056b3; }
 
-        .mode-container {
-            display: none; width: 100%; max-width: 800px; flex-direction: column; align-items: center;
-        }
+        .mode-container { display: none; width: 100%; max-width: 800px; flex-direction: column; align-items: center; }
         .mode-container.active { display: flex; }
 
-        /* 기본 자리 연습 스타일 */
         #basic-target { font-size: 4em; font-weight: bold; margin: 10px; color: #007bff; background: #fff; padding: 15px 40px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         #finger-guide { font-size: 1.2em; color: #ff8c00; font-weight: bold; margin-bottom: 5px; height: 25px; }
         #basic-feedback { font-size: 1.3em; height: 30px; font-weight: bold; margin-bottom: 10px; }
 
-        /* 단어 게임 스타일 */
         #game-board { 
             width: 100%; height: 280px; background-color: #fff; border: 4px solid #007bff; 
             border-radius: 15px; position: relative; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
@@ -63,21 +51,19 @@
             font-weight: bold; margin: 10px 0; color: #d9534f;
         }
 
-        /* 문장 연습 스타일 */
         #sentence-display { 
             font-size: 1.4em; margin: 20px 0; padding: 20px; background: #fff; 
             border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-weight: bold; 
             text-align: center; line-height: 1.4; width: 100%; box-sizing: border-box;
+            word-break: keep-all;
         }
         #accuracy { font-size: 1.2em; color: #d9534f; margin-top: 15px; font-weight: bold; height: 30px;}
 
-        /* 공통 입력창 스타일 */
         .input-box {
             font-size: 1.8em; padding: 10px; text-align: center; width: 90%;
             border: 3px solid #28a745; border-radius: 10px; outline: none; margin-bottom: 20px;
         }
 
-        /* 가상 키보드 영역 */
         #keyboard {
             display: flex; flex-direction: column; gap: 5px; background: #e9ecef;
             padding: 10px; border-radius: 10px; width: 100%; max-width: 800px; box-sizing: border-box;
@@ -92,7 +78,6 @@
         .key .eng { font-size: 0.75em; color: #007bff; }
         .key .kor { font-size: 0.95em; color: #d9534f; }
         
-        /* 키 입력 및 타겟 하이라이트 효과 */
         .key.active { background: #ffeb3b; transform: translateY(3px); box-shadow: 0 0 0 #ccc; border-color: #fbc02d; }
         
         @keyframes pulse {
@@ -104,12 +89,10 @@
             background-color: #d4edda; border: 2px solid #28a745; 
             box-shadow: 0 0 8px #28a745; animation: pulse 1.5s infinite; color: #155724;
         }
-
     </style>
 </head>
 <body>
 
-    <!-- 공통 언어 설정 -->
     <div class="global-controls">
         <label><input type="radio" name="global-lang" value="kor" checked onchange="changeGlobalLang()"> 🇰🇷 한글</label>
         <label><input type="radio" name="global-lang" value="eng" onchange="changeGlobalLang()"> 🇺🇸 영문</label>
@@ -118,10 +101,9 @@
     <div class="tab-menu">
         <button class="tab-btn active" onclick="switchMode('basic')">⌨️ 기본 자리</button>
         <button class="tab-btn" onclick="switchMode('game')">🎮 게임 모드</button>
-        <button class="tab-btn" onclick="switchMode('sentence')">📖 동화 연습</button>
+        <button class="tab-btn" onclick="switchMode('sentence')">📖 다양한 문장</button>
     </div>
 
-    <!-- 1. 기본 자리 연습 모드 -->
     <div id="basic-mode" class="mode-container active">
         <div id="finger-guide">왼손 새끼손가락</div>
         <div id="basic-target">ㅁ</div>
@@ -129,7 +111,6 @@
         <input type="text" id="basic-input" class="input-box" autocomplete="off" maxlength="1" placeholder="여기에 치세요">
     </div>
 
-    <!-- 2. 단어 게임 모드 -->
     <div id="game-mode" class="mode-container">
         <div id="status-bar">
             <span id="score-display">점수: 0</span>
@@ -139,14 +120,12 @@
         <input type="text" id="game-input" class="input-box" autocomplete="off" placeholder="단어를 입력하세요">
     </div>
 
-    <!-- 3. 문장 연습 모드 -->
     <div id="sentence-mode" class="mode-container">
         <div id="sentence-display">불러오는 중...</div>
         <input type="text" id="sentence-input" class="input-box" autocomplete="off" placeholder="위 문장을 똑같이 입력하세요">
         <div id="accuracy"></div>
     </div>
 
-    <!-- 공통 가상 키보드 영역 -->
     <div id="keyboard"></div>
 
     <script>
@@ -156,9 +135,6 @@
             });
         }
 
-        /* =========================================
-           글로벌 변수 및 언어 설정 로직
-        ========================================= */
         let currentLang = 'kor';
         let currentMode = 'basic';
         
@@ -168,7 +144,6 @@
                 if(radios[i].checked) currentLang = radios[i].value;
             }
             
-            // 모드 초기화
             if (currentMode === 'basic') {
                 nextBasicChar();
                 document.getElementById('basic-input').focus();
@@ -177,9 +152,7 @@
                 activeWords = [];
                 document.getElementById('game-input').focus();
             } else if (currentMode === 'sentence') {
-                currentSentenceIndex = 0;
                 loadNextSentence();
-                document.getElementById('sentence-input').focus();
             }
         }
 
@@ -192,7 +165,6 @@
             document.getElementById('game-mode').classList.remove('active');
             document.getElementById('sentence-mode').classList.remove('active');
             
-            // 모드 전환 시 이전 타겟 하이라이트 지우기
             removeTargetHighlight();
 
             if (mode === 'basic') {
@@ -205,20 +177,15 @@
             } else {
                 document.getElementById('sentence-mode').classList.add('active');
                 loadNextSentence();
-                document.getElementById('sentence-input').focus();
             }
         }
 
-        /* =========================================
-           가상 키보드 생성 및 하이라이트 매핑
-        ========================================= */
         const keysLayout = [
             [{c:'KeyQ',e:'Q',k:'ㅂ'}, {c:'KeyW',e:'W',k:'ㅈ'}, {c:'KeyE',e:'E',k:'ㄷ'}, {c:'KeyR',e:'R',k:'ㄱ'}, {c:'KeyT',e:'T',k:'ㅅ'}, {c:'KeyY',e:'Y',k:'ㅛ'}, {c:'KeyU',e:'U',k:'ㅕ'}, {c:'KeyI',e:'I',k:'ㅑ'}, {c:'KeyO',e:'O',k:'ㅐ'}, {c:'KeyP',e:'P',k:'ㅔ'}],
             [{c:'KeyA',e:'A',k:'ㅁ'}, {c:'KeyS',e:'S',k:'ㄴ'}, {c:'KeyD',e:'D',k:'ㅇ'}, {c:'KeyF',e:'F',k:'ㄹ'}, {c:'KeyG',e:'G',k:'ㅎ'}, {c:'KeyH',e:'H',k:'ㅗ'}, {c:'KeyJ',e:'J',k:'ㅓ'}, {c:'KeyK',e:'K',k:'ㅏ'}, {c:'KeyL',e:'L',k:'ㅣ'}],
             [{c:'KeyZ',e:'Z',k:'ㅋ'}, {c:'KeyX',e:'X',k:'ㅌ'}, {c:'KeyC',e:'C',k:'ㅊ'}, {c:'KeyV',e:'V',k:'ㅍ'}, {c:'KeyB',e:'B',k:'ㅠ'}, {c:'KeyN',e:'N',k:'ㅜ'}, {c:'KeyM',e:'M',k:'ㅡ'}]
         ];
 
-        // 키-코드 매핑 (타겟 문자 찾기용)
         const keycodeMap = {
             'ㅂ':'KeyQ','ㅈ':'KeyW','ㄷ':'KeyE','ㄱ':'KeyR','ㅅ':'KeyT','ㅛ':'KeyY','ㅕ':'KeyU','ㅑ':'KeyI','ㅐ':'KeyO','ㅔ':'KeyP',
             'ㅁ':'KeyA','ㄴ':'KeyS','ㅇ':'KeyD','ㄹ':'KeyF','ㅎ':'KeyG','ㅗ':'KeyH','ㅓ':'KeyJ','ㅏ':'KeyK','ㅣ':'KeyL',
@@ -226,7 +193,6 @@
             'a':'KeyA','b':'KeyB','c':'KeyC','d':'KeyD','e':'KeyE','f':'KeyF','g':'KeyG','h':'KeyH','i':'KeyI','j':'KeyJ','k':'KeyK','l':'KeyL','m':'KeyM','n':'KeyN','o':'KeyO','p':'KeyP','q':'KeyQ','r':'KeyR','s':'KeyS','t':'KeyT','u':'KeyU','v':'KeyV','w':'KeyW','x':'KeyX','y':'KeyY','z':'KeyZ'
         };
 
-        // 손가락 위치 안내 매핑
         const fingerMap = {
             'ㅂ':'🖐️ 왼손 새끼손가락', 'ㅈ':'🖐️ 왼손 약지', 'ㄷ':'🖐️ 왼손 중지', 'ㄱ':'🖐️ 왼손 검지', 'ㅅ':'🖐️ 왼손 검지',
             'ㅛ':'🖐️ 오른손 검지', 'ㅕ':'🖐️ 오른손 검지', 'ㅑ':'🖐️ 오른손 중지', 'ㅐ':'🖐️ 오른손 약지', 'ㅔ':'🖐️ 오른손 새끼손가락',
@@ -269,9 +235,7 @@
             document.querySelectorAll('.key.target').forEach(el => el.classList.remove('target'));
         }
 
-        /* =========================================
-           1. 기본 자리 연습 로직
-        ========================================= */
+        /* 1. 기본 자리 연습 */
         const basicKorChars = ['ㅂ','ㅈ','ㄷ','ㄱ','ㅅ','ㅛ','ㅕ','ㅑ','ㅐ','ㅔ','ㅁ','ㄴ','ㅇ','ㄹ','ㅎ','ㅗ','ㅓ','ㅏ','ㅣ','ㅋ','ㅌ','ㅊ','ㅍ','ㅠ','ㅜ','ㅡ'];
         const basicEngChars = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
 
@@ -284,7 +248,6 @@
             document.getElementById('basic-input').value = '';
             document.getElementById('basic-feedback').textContent = '';
             
-            // 손가락 가이드 및 키보드 하이라이트 설정
             document.getElementById('finger-guide').textContent = fingerMap[randomChar] || "";
             const targetCode = keycodeMap[randomChar];
             if (targetCode) {
@@ -299,7 +262,7 @@
             if (typed === target) {
                 document.getElementById('basic-feedback').style.color = "#28a745";
                 document.getElementById('basic-feedback').textContent = "딩동댕! 🎵";
-                removeTargetHighlight(); // 정답 시 하이라이트 제거
+                removeTargetHighlight();
                 setTimeout(nextBasicChar, 200);
             } else if (typed !== "") {
                 document.getElementById('basic-feedback').style.color = "#d9534f";
@@ -308,9 +271,7 @@
             }
         });
 
-        /* =========================================
-           2. 단어 방어 게임 로직
-        ========================================= */
+        /* 2. 단어 방어 게임 */
         const wordListKor = ["학교", "우주선", "자전거", "놀이터", "친구", "컴퓨터", "선생님", "강아지", "고양이", "태블릿", "사과", "바다"];
         const wordListEng = ["apple", "book", "cat", "dog", "sun", "moon", "star", "tree", "water", "happy", "space", "desk"];
         
@@ -402,46 +363,66 @@
         setInterval(spawnWord, 2500);
         requestAnimationFrame(gameLoop);
 
-        /* =========================================
-           3. 동화 문장 연습 로직
-        ========================================= */
-        const storyKor = [
-            "옛날 옛적에 숲 속에 아기 돼지 삼형제가 살았어요.",
-            "첫째 돼지는 짚으로 얼기설기 집을 지었어요.",
-            "둘째 돼지는 나무로 뚝딱뚝딱 집을 지었어요.",
-            "셋째 돼지는 튼튼한 벽돌로 집을 지었어요."
-        ];
-        
-        const storyEng = [
-            "A long time ago, there lived three little pigs.",
-            "The first pig built a house of straw.",
-            "The second pig built a house of sticks.",
-            "The third pig built a house of bricks."
-        ];
-
-        let currentSentenceIndex = 0;
+        /* 3. 온라인 무한 문장 연습 로직 */
+        let currentTargetSentence = "";
         const sentenceInput = document.getElementById('sentence-input');
         const accuracyDisplay = document.getElementById('accuracy');
 
-        function loadNextSentence() {
-            const stories = currentLang === 'kor' ? storyKor : storyEng;
-            document.getElementById('sentence-display').textContent = stories[currentSentenceIndex];
+        async function loadNextSentence() {
+            sentenceInput.disabled = true;
+            document.getElementById('sentence-display').textContent = "새로운 문장을 불러오는 중... ⏳";
+            accuracyDisplay.textContent = "";
+
+            try {
+                if (currentLang === 'kor') {
+                    // 한국어 랜덤 명언 API 호출
+                    const response = await fetch('https://korean-advice-open-api.vercel.app/api/advice');
+                    if (!response.ok) throw new Error('API Error');
+                    const data = await response.json();
+                    currentTargetSentence = data.message;
+                } else {
+                    // 영어 랜덤 명언 API 호출
+                    const response = await fetch('https://dummyjson.com/quotes/random');
+                    if (!response.ok) throw new Error('API Error');
+                    const data = await response.json();
+                    currentTargetSentence = data.quote;
+                }
+            } catch (error) {
+                // 오프라인이거나 서버 통신 실패 시 사용할 예비 문장들 (초등학생 수준)
+                const fallbackKor = [
+                    "거북이는 느리지만 끝까지 포기하지 않았어요.",
+                    "비 온 뒤에는 맑은 하늘에 무지개가 떠요.",
+                    "작은 씨앗이 자라서 커다란 사과나무가 되었어요.",
+                    "아기 새는 매일 매일 날갯짓을 연습했어요.",
+                    "친구와 함께 놀면 기쁨이 두 배가 된답니다.",
+                    "별들은 밤하늘에서 반짝반짝 빛나고 있어요."
+                ];
+                const fallbackEng = [
+                    "A good friend is a great treasure.",
+                    "Every day is a fresh new start.",
+                    "Practice makes perfect.",
+                    "Stars shine brightest in the dark.",
+                    "Reading books takes you on an adventure.",
+                    "Always believe in yourself."
+                ];
+                const arr = currentLang === 'kor' ? fallbackKor : fallbackEng;
+                currentTargetSentence = arr[Math.floor(Math.random() * arr.length)];
+            }
+
+            document.getElementById('sentence-display').textContent = currentTargetSentence;
             sentenceInput.value = '';
-            accuracyDisplay.textContent = '';
             sentenceInput.disabled = false;
+            sentenceInput.focus();
         }
 
         sentenceInput.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') {
-                const stories = currentLang === 'kor' ? storyKor : storyEng;
-                const target = stories[currentSentenceIndex];
                 const typed = sentenceInput.value;
                 
-                if (target === typed) {
+                if (currentTargetSentence === typed) {
                     accuracyDisplay.style.color = "#28a745";
                     accuracyDisplay.textContent = "완벽해요! 💯 다음 문장으로 넘어갑니다.";
                     sentenceInput.disabled = true; 
-                    currentSentenceIndex = (currentSentenceIndex + 1) % stories.length;
                     setTimeout(loadNextSentence, 1500);
                 } else {
                     accuracyDisplay.style.color = "#d9534f";
@@ -450,7 +431,6 @@
             }
         });
 
-        // 앱 실행 시 초기화
         nextBasicChar();
         
     </script>
