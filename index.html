@@ -16,130 +16,104 @@
             align-items: center; 
         }
         
+        /* 글로벌 언어 선택 스위치 */
+        .global-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .global-controls label { cursor: pointer; display: flex; align-items: center; gap: 5px; }
+
         .tab-menu { display: flex; gap: 5px; margin-bottom: 15px; width: 100%; max-width: 800px; justify-content: center; }
         .tab-btn { 
-            flex: 1;
-            padding: 10px 5px; 
-            font-size: 1.1em; 
-            cursor: pointer; 
-            background-color: #e9ecef; 
-            border: 2px solid #ccc; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            transition: 0.2s;
-            text-align: center;
+            flex: 1; padding: 10px 5px; font-size: 1.1em; cursor: pointer; 
+            background-color: #e9ecef; border: 2px solid #ccc; border-radius: 8px; 
+            font-weight: bold; transition: 0.2s; text-align: center;
         }
         .tab-btn.active { background-color: #007bff; color: white; border-color: #0056b3; }
 
         .mode-container {
-            display: none;
-            width: 100%;
-            max-width: 800px;
-            flex-direction: column;
-            align-items: center;
+            display: none; width: 100%; max-width: 800px; flex-direction: column; align-items: center;
         }
         .mode-container.active { display: flex; }
 
         /* 기본 자리 연습 스타일 */
-        .lang-toggle { margin-bottom: 15px; font-size: 1.2em; font-weight: bold; }
-        .lang-toggle label { margin: 0 10px; cursor: pointer; }
-        #basic-target { font-size: 4em; font-weight: bold; margin: 20px; color: #007bff; background: #fff; padding: 20px 40px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        #basic-target { font-size: 4em; font-weight: bold; margin: 10px; color: #007bff; background: #fff; padding: 15px 40px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        #finger-guide { font-size: 1.2em; color: #ff8c00; font-weight: bold; margin-bottom: 5px; height: 25px; }
         #basic-feedback { font-size: 1.3em; height: 30px; font-weight: bold; margin-bottom: 10px; }
 
+        /* 단어 게임 스타일 */
         #game-board { 
-            width: 100%; 
-            height: 300px; 
-            background-color: #fff; 
-            border: 4px solid #007bff; 
-            border-radius: 15px; 
-            position: relative; 
-            overflow: hidden; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            width: 100%; height: 280px; background-color: #fff; border: 4px solid #007bff; 
+            border-radius: 15px; position: relative; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         .falling-word {
-            position: absolute;
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #333;
-            padding: 5px 10px;
-            background-color: #ffeaa7;
-            border-radius: 8px;
-            white-space: nowrap;
+            position: absolute; font-size: 1.5em; font-weight: bold; color: #333; padding: 5px 10px;
+            background-color: #ffeaa7; border-radius: 8px; white-space: nowrap;
         }
         #status-bar {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.2em;
-            font-weight: bold;
-            margin: 10px 0;
-            color: #d9534f;
-        }
-        .input-box {
-            font-size: 1.8em;
-            padding: 10px;
-            text-align: center;
-            width: 90%;
-            border: 3px solid #28a745;
-            border-radius: 10px;
-            outline: none;
-            margin-bottom: 20px;
+            width: 100%; display: flex; justify-content: space-between; font-size: 1.2em;
+            font-weight: bold; margin: 10px 0; color: #d9534f;
         }
 
+        /* 문장 연습 스타일 */
         #sentence-display { 
-            font-size: 1.4em; 
-            margin: 20px 0; 
-            padding: 20px; 
-            background: #fff; 
-            border-radius: 10px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
-            font-weight: bold; 
-            text-align: center;
-            line-height: 1.4;
-            width: 100%;
-            box-sizing: border-box;
+            font-size: 1.4em; margin: 20px 0; padding: 20px; background: #fff; 
+            border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); font-weight: bold; 
+            text-align: center; line-height: 1.4; width: 100%; box-sizing: border-box;
         }
         #accuracy { font-size: 1.2em; color: #d9534f; margin-top: 15px; font-weight: bold; height: 30px;}
 
+        /* 공통 입력창 스타일 */
+        .input-box {
+            font-size: 1.8em; padding: 10px; text-align: center; width: 90%;
+            border: 3px solid #28a745; border-radius: 10px; outline: none; margin-bottom: 20px;
+        }
+
+        /* 가상 키보드 영역 */
         #keyboard {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: #e9ecef;
-            padding: 10px;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 800px;
-            box-sizing: border-box;
+            display: flex; flex-direction: column; gap: 5px; background: #e9ecef;
+            padding: 10px; border-radius: 10px; width: 100%; max-width: 800px; box-sizing: border-box;
         }
         .key-row { display: flex; justify-content: center; gap: 4px; }
         .key {
-            flex: 1;
-            max-width: 50px;
-            height: 45px;
-            background: #fff;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #555;
-            box-shadow: 0 3px 0 #ccc;
+            flex: 1; max-width: 50px; height: 45px; background: #fff; border: 2px solid #ccc;
+            border-radius: 8px; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; font-weight: bold; color: #555; box-shadow: 0 3px 0 #ccc;
             transition: all 0.1s;
         }
         .key .eng { font-size: 0.75em; color: #007bff; }
         .key .kor { font-size: 0.95em; color: #d9534f; }
-        .key.active {
-            background: #ffeb3b;
-            transform: translateY(3px);
-            box-shadow: 0 0 0 #ccc;
-            border-color: #fbc02d;
+        
+        /* 키 입력 및 타겟 하이라이트 효과 */
+        .key.active { background: #ffeb3b; transform: translateY(3px); box-shadow: 0 0 0 #ccc; border-color: #fbc02d; }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(40, 167, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
         }
+        .key.target {
+            background-color: #d4edda; border: 2px solid #28a745; 
+            box-shadow: 0 0 8px #28a745; animation: pulse 1.5s infinite; color: #155724;
+        }
+
     </style>
 </head>
 <body>
+
+    <!-- 공통 언어 설정 -->
+    <div class="global-controls">
+        <label><input type="radio" name="global-lang" value="kor" checked onchange="changeGlobalLang()"> 🇰🇷 한글</label>
+        <label><input type="radio" name="global-lang" value="eng" onchange="changeGlobalLang()"> 🇺🇸 영문</label>
+    </div>
 
     <div class="tab-menu">
         <button class="tab-btn active" onclick="switchMode('basic')">⌨️ 기본 자리</button>
@@ -149,10 +123,7 @@
 
     <!-- 1. 기본 자리 연습 모드 -->
     <div id="basic-mode" class="mode-container active">
-        <div class="lang-toggle">
-            <label><input type="radio" name="lang" value="kor" checked onchange="changeBasicLang()"> 한글</label>
-            <label><input type="radio" name="lang" value="eng" onchange="changeBasicLang()"> 영문</label>
-        </div>
+        <div id="finger-guide">왼손 새끼손가락</div>
         <div id="basic-target">ㅁ</div>
         <div id="basic-feedback"></div>
         <input type="text" id="basic-input" class="input-box" autocomplete="off" maxlength="1" placeholder="여기에 치세요">
@@ -181,13 +152,37 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .catch(err => console.log('서비스 워커 등록 실패:', err));
+                navigator.serviceWorker.register('./sw.js').catch(() => {});
             });
         }
 
+        /* =========================================
+           글로벌 변수 및 언어 설정 로직
+        ========================================= */
+        let currentLang = 'kor';
         let currentMode = 'basic';
         
+        function changeGlobalLang() {
+            const radios = document.getElementsByName('global-lang');
+            for(let i = 0; i < radios.length; i++) {
+                if(radios[i].checked) currentLang = radios[i].value;
+            }
+            
+            // 모드 초기화
+            if (currentMode === 'basic') {
+                nextBasicChar();
+                document.getElementById('basic-input').focus();
+            } else if (currentMode === 'game') {
+                activeWords.forEach(w => gameBoard.removeChild(w.el));
+                activeWords = [];
+                document.getElementById('game-input').focus();
+            } else if (currentMode === 'sentence') {
+                currentSentenceIndex = 0;
+                loadNextSentence();
+                document.getElementById('sentence-input').focus();
+            }
+        }
+
         function switchMode(mode) {
             currentMode = mode;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -197,6 +192,9 @@
             document.getElementById('game-mode').classList.remove('active');
             document.getElementById('sentence-mode').classList.remove('active');
             
+            // 모드 전환 시 이전 타겟 하이라이트 지우기
+            removeTargetHighlight();
+
             if (mode === 'basic') {
                 document.getElementById('basic-mode').classList.add('active');
                 nextBasicChar();
@@ -211,11 +209,38 @@
             }
         }
 
+        /* =========================================
+           가상 키보드 생성 및 하이라이트 매핑
+        ========================================= */
         const keysLayout = [
             [{c:'KeyQ',e:'Q',k:'ㅂ'}, {c:'KeyW',e:'W',k:'ㅈ'}, {c:'KeyE',e:'E',k:'ㄷ'}, {c:'KeyR',e:'R',k:'ㄱ'}, {c:'KeyT',e:'T',k:'ㅅ'}, {c:'KeyY',e:'Y',k:'ㅛ'}, {c:'KeyU',e:'U',k:'ㅕ'}, {c:'KeyI',e:'I',k:'ㅑ'}, {c:'KeyO',e:'O',k:'ㅐ'}, {c:'KeyP',e:'P',k:'ㅔ'}],
             [{c:'KeyA',e:'A',k:'ㅁ'}, {c:'KeyS',e:'S',k:'ㄴ'}, {c:'KeyD',e:'D',k:'ㅇ'}, {c:'KeyF',e:'F',k:'ㄹ'}, {c:'KeyG',e:'G',k:'ㅎ'}, {c:'KeyH',e:'H',k:'ㅗ'}, {c:'KeyJ',e:'J',k:'ㅓ'}, {c:'KeyK',e:'K',k:'ㅏ'}, {c:'KeyL',e:'L',k:'ㅣ'}],
             [{c:'KeyZ',e:'Z',k:'ㅋ'}, {c:'KeyX',e:'X',k:'ㅌ'}, {c:'KeyC',e:'C',k:'ㅊ'}, {c:'KeyV',e:'V',k:'ㅍ'}, {c:'KeyB',e:'B',k:'ㅠ'}, {c:'KeyN',e:'N',k:'ㅜ'}, {c:'KeyM',e:'M',k:'ㅡ'}]
         ];
+
+        // 키-코드 매핑 (타겟 문자 찾기용)
+        const keycodeMap = {
+            'ㅂ':'KeyQ','ㅈ':'KeyW','ㄷ':'KeyE','ㄱ':'KeyR','ㅅ':'KeyT','ㅛ':'KeyY','ㅕ':'KeyU','ㅑ':'KeyI','ㅐ':'KeyO','ㅔ':'KeyP',
+            'ㅁ':'KeyA','ㄴ':'KeyS','ㅇ':'KeyD','ㄹ':'KeyF','ㅎ':'KeyG','ㅗ':'KeyH','ㅓ':'KeyJ','ㅏ':'KeyK','ㅣ':'KeyL',
+            'ㅋ':'KeyZ','ㅌ':'KeyX','ㅊ':'KeyC','ㅍ':'KeyV','ㅠ':'KeyB','ㅜ':'KeyN','ㅡ':'KeyM',
+            'a':'KeyA','b':'KeyB','c':'KeyC','d':'KeyD','e':'KeyE','f':'KeyF','g':'KeyG','h':'KeyH','i':'KeyI','j':'KeyJ','k':'KeyK','l':'KeyL','m':'KeyM','n':'KeyN','o':'KeyO','p':'KeyP','q':'KeyQ','r':'KeyR','s':'KeyS','t':'KeyT','u':'KeyU','v':'KeyV','w':'KeyW','x':'KeyX','y':'KeyY','z':'KeyZ'
+        };
+
+        // 손가락 위치 안내 매핑
+        const fingerMap = {
+            'ㅂ':'🖐️ 왼손 새끼손가락', 'ㅈ':'🖐️ 왼손 약지', 'ㄷ':'🖐️ 왼손 중지', 'ㄱ':'🖐️ 왼손 검지', 'ㅅ':'🖐️ 왼손 검지',
+            'ㅛ':'🖐️ 오른손 검지', 'ㅕ':'🖐️ 오른손 검지', 'ㅑ':'🖐️ 오른손 중지', 'ㅐ':'🖐️ 오른손 약지', 'ㅔ':'🖐️ 오른손 새끼손가락',
+            'ㅁ':'🖐️ 왼손 새끼손가락', 'ㄴ':'🖐️ 왼손 약지', 'ㅇ':'🖐️ 왼손 중지', 'ㄹ':'🖐️ 왼손 검지', 'ㅎ':'🖐️ 왼손 검지',
+            'ㅗ':'🖐️ 오른손 검지', 'ㅓ':'🖐️ 오른손 검지', 'ㅏ':'🖐️ 오른손 중지', 'ㅣ':'🖐️ 오른손 약지',
+            'ㅋ':'🖐️ 왼손 새끼손가락', 'ㅌ':'🖐️ 왼손 약지', 'ㅊ':'🖐️ 왼손 중지', 'ㅍ':'🖐️ 왼손 검지', 'ㅠ':'🖐️ 왼손 검지',
+            'ㅜ':'🖐️ 오른손 검지', 'ㅡ':'🖐️ 오른손 검지',
+            'q':'🖐️ 왼손 새끼손가락', 'w':'🖐️ 왼손 약지', 'e':'🖐️ 왼손 중지', 'r':'🖐️ 왼손 검지', 't':'🖐️ 왼손 검지',
+            'y':'🖐️ 오른손 검지', 'u':'🖐️ 오른손 검지', 'i':'🖐️ 오른손 중지', 'o':'🖐️ 오른손 약지', 'p':'🖐️ 오른손 새끼손가락',
+            'a':'🖐️ 왼손 새끼손가락', 's':'🖐️ 왼손 약지', 'd':'🖐️ 왼손 중지', 'f':'🖐️ 왼손 검지', 'g':'🖐️ 왼손 검지',
+            'h':'🖐️ 오른손 검지', 'j':'🖐️ 오른손 검지', 'k':'🖐️ 오른손 중지', 'l':'🖐️ 오른손 약지',
+            'z':'🖐️ 왼손 새끼손가락', 'x':'🖐️ 왼손 약지', 'c':'🖐️ 왼손 중지', 'v':'🖐️ 왼손 검지', 'b':'🖐️ 왼손 검지',
+            'n':'🖐️ 오른손 검지', 'm':'🖐️ 오른손 검지'
+        };
 
         const keyboardEl = document.getElementById('keyboard');
         keysLayout.forEach(row => {
@@ -240,28 +265,31 @@
             if (keyEl) keyEl.classList.remove('active');
         });
 
+        function removeTargetHighlight() {
+            document.querySelectorAll('.key.target').forEach(el => el.classList.remove('target'));
+        }
+
         /* =========================================
            1. 기본 자리 연습 로직
         ========================================= */
         const basicKorChars = ['ㅂ','ㅈ','ㄷ','ㄱ','ㅅ','ㅛ','ㅕ','ㅑ','ㅐ','ㅔ','ㅁ','ㄴ','ㅇ','ㄹ','ㅎ','ㅗ','ㅓ','ㅏ','ㅣ','ㅋ','ㅌ','ㅊ','ㅍ','ㅠ','ㅜ','ㅡ'];
         const basicEngChars = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
-        let currentBasicLang = 'kor';
-
-        function changeBasicLang() {
-            const radios = document.getElementsByName('lang');
-            for(let i = 0; i < radios.length; i++) {
-                if(radios[i].checked) currentBasicLang = radios[i].value;
-            }
-            nextBasicChar();
-            document.getElementById('basic-input').focus();
-        }
 
         function nextBasicChar() {
-            const chars = currentBasicLang === 'kor' ? basicKorChars : basicEngChars;
+            removeTargetHighlight();
+            const chars = currentLang === 'kor' ? basicKorChars : basicEngChars;
             const randomChar = chars[Math.floor(Math.random() * chars.length)];
+            
             document.getElementById('basic-target').textContent = randomChar;
             document.getElementById('basic-input').value = '';
             document.getElementById('basic-feedback').textContent = '';
+            
+            // 손가락 가이드 및 키보드 하이라이트 설정
+            document.getElementById('finger-guide').textContent = fingerMap[randomChar] || "";
+            const targetCode = keycodeMap[randomChar];
+            if (targetCode) {
+                document.getElementById(targetCode).classList.add('target');
+            }
         }
 
         document.getElementById('basic-input').addEventListener('input', (e) => {
@@ -271,21 +299,20 @@
             if (typed === target) {
                 document.getElementById('basic-feedback').style.color = "#28a745";
                 document.getElementById('basic-feedback').textContent = "딩동댕! 🎵";
+                removeTargetHighlight(); // 정답 시 하이라이트 제거
                 setTimeout(nextBasicChar, 200);
             } else if (typed !== "") {
                 document.getElementById('basic-feedback').style.color = "#d9534f";
                 document.getElementById('basic-feedback').textContent = "다시 쳐볼까요?";
-                e.target.value = ""; // 오타 시 즉시 지우기
+                e.target.value = ""; 
             }
         });
 
         /* =========================================
            2. 단어 방어 게임 로직
         ========================================= */
-        const wordList = [
-            "학교", "우주선", "자전거", "놀이터", "친구", "컴퓨터", "선생님", "강아지", "고양이", "태블릿",
-            "apple", "book", "cat", "dog", "sun", "moon", "star", "tree", "water", "happy"
-        ];
+        const wordListKor = ["학교", "우주선", "자전거", "놀이터", "친구", "컴퓨터", "선생님", "강아지", "고양이", "태블릿", "사과", "바다"];
+        const wordListEng = ["apple", "book", "cat", "dog", "sun", "moon", "star", "tree", "water", "happy", "space", "desk"];
         
         const gameBoard = document.getElementById('game-board');
         const gameInput = document.getElementById('game-input');
@@ -300,7 +327,8 @@
         function spawnWord() {
             if (lives <= 0 || currentMode !== 'game') return;
 
-            const wordText = wordList[Math.floor(Math.random() * wordList.length)];
+            const words = currentLang === 'kor' ? wordListKor : wordListEng;
+            const wordText = words[Math.floor(Math.random() * words.length)];
             const wordEl = document.createElement('div');
             wordEl.className = 'falling-word';
             wordEl.textContent = wordText;
@@ -342,7 +370,7 @@
             
             if(lives <= 0) {
                 gameInput.disabled = true;
-                alert(`게임 오버! 최종 점수: ${score}점\n새로고침하여 다시 시작하세요.`);
+                alert(`게임 오버! 최종 점수: ${score}점\n언어를 변경하거나 탭을 눌러 다시 시작하세요.`);
             }
         }
 
@@ -377,32 +405,27 @@
         /* =========================================
            3. 동화 문장 연습 로직
         ========================================= */
-        let storySentences = [];
+        const storyKor = [
+            "옛날 옛적에 숲 속에 아기 돼지 삼형제가 살았어요.",
+            "첫째 돼지는 짚으로 얼기설기 집을 지었어요.",
+            "둘째 돼지는 나무로 뚝딱뚝딱 집을 지었어요.",
+            "셋째 돼지는 튼튼한 벽돌로 집을 지었어요."
+        ];
+        
+        const storyEng = [
+            "A long time ago, there lived three little pigs.",
+            "The first pig built a house of straw.",
+            "The second pig built a house of sticks.",
+            "The third pig built a house of bricks."
+        ];
+
         let currentSentenceIndex = 0;
         const sentenceInput = document.getElementById('sentence-input');
         const accuracyDisplay = document.getElementById('accuracy');
 
-        function fetchStories() {
-            const freshData = [
-                "옛날 옛적에 숲 속에 귀여운 아기 돼지 삼형제가 살았어요.",
-                "첫째 돼지는 짚으로 얼기설기 집을 지었어요.",
-                "둘째 돼지는 나무로 뚝딱뚝딱 집을 지었어요.",
-                "셋째 돼지는 튼튼한 벽돌로 집을 지었어요.",
-                "A long time ago, there lived three little pigs.",
-                "The first pig built a house of straw."
-            ];
-
-            if (navigator.onLine) {
-                localStorage.setItem('typingStories', JSON.stringify(freshData));
-            }
-            
-            const saved = localStorage.getItem('typingStories');
-            storySentences = saved ? JSON.parse(saved) : ["오프라인 상태입니다. 인터넷을 한 번 연결해 주세요."];
-        }
-
         function loadNextSentence() {
-            if(storySentences.length === 0) fetchStories();
-            document.getElementById('sentence-display').textContent = storySentences[currentSentenceIndex];
+            const stories = currentLang === 'kor' ? storyKor : storyEng;
+            document.getElementById('sentence-display').textContent = stories[currentSentenceIndex];
             sentenceInput.value = '';
             accuracyDisplay.textContent = '';
             sentenceInput.disabled = false;
@@ -410,14 +433,15 @@
 
         sentenceInput.addEventListener('keyup', (e) => {
             if (e.key === 'Enter') {
-                const target = storySentences[currentSentenceIndex];
+                const stories = currentLang === 'kor' ? storyKor : storyEng;
+                const target = stories[currentSentenceIndex];
                 const typed = sentenceInput.value;
                 
                 if (target === typed) {
                     accuracyDisplay.style.color = "#28a745";
                     accuracyDisplay.textContent = "완벽해요! 💯 다음 문장으로 넘어갑니다.";
                     sentenceInput.disabled = true; 
-                    currentSentenceIndex = (currentSentenceIndex + 1) % storySentences.length;
+                    currentSentenceIndex = (currentSentenceIndex + 1) % stories.length;
                     setTimeout(loadNextSentence, 1500);
                 } else {
                     accuracyDisplay.style.color = "#d9534f";
@@ -426,9 +450,7 @@
             }
         });
 
-        fetchStories();
-        
-        // 앱 실행 시 기본자리 모드 활성화
+        // 앱 실행 시 초기화
         nextBasicChar();
         
     </script>
